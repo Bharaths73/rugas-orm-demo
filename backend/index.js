@@ -17,8 +17,8 @@ app.use(express.json());
 
 connect();
 
-// app.use('/api/v1/customers', customerRoutes);
-// app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/customers', customerRoutes);
+app.use('/api/v1/products', productRoutes);
 // app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/auth', authRoutes);
 
