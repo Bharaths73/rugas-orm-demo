@@ -35,13 +35,13 @@ exports.createOrder=async(req,res)=>{
     product.quantity -= quantity;
     await product.save();
 
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         message: 'Order created successfully',
         order: newOrder
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
         success: false,
         message:error.message
     });
@@ -49,14 +49,16 @@ exports.createOrder=async(req,res)=>{
 }
 
 exports.getAllOrders=async(req,res)=>{
+    const {sortOrder='status'}=req.query
   try {
-    const orders = await Order.find().populate('customerId').populate('productId');
-    res.status(200).json({
+    const orders = await Order.find().populate('customerId').populate('productId').sort({[sortOrder]:1});
+
+    return res.status(200).json({
         success: true,
         orders: orders
     });
   } catch (err) {
-    res.status(500).json({
+    return res.status(500).json({
         success: false,
         message: err.message
     });
@@ -64,4 +66,6 @@ exports.getAllOrders=async(req,res)=>{
 }
 
 
-exports.updateOrderStatus=async(req,res)=>{}
+exports.updateOrderStatus=async(req,res)=>{
+
+}

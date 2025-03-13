@@ -40,7 +40,7 @@ exports.createCustomer=async(req,res)=>{
 
 exports.getAllCustomers=async(req,res)=>{
     try {
-        const customers=await Customer.find({}).sort({name:1})
+        const customers=await Customer.find({}).sort({name:1}).select("name email phone address")
         return res.status(200).json({
             success:true,
             customers:customers
