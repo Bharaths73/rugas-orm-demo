@@ -1,8 +1,12 @@
 const express = require('express');
 const { auth } = require('../middleware/Auth');
-const { createProduct, getAllProducts } = require('../controllers/product');
+const { createProduct, getAllProducts, deleteProduct } = require('../controllers/product');
 const router = express.Router();
 
-router.post('/product',auth,createProduct)
+const multer = require('multer');
+const upload=multer({dest:"uploads/products/"})
+
+router.post('/product',auth, upload.single('image'),createProduct)
 router.get('/',auth,getAllProducts)
+router.delete("/product/:id",auth,deleteProduct)
 module.exports = router;

@@ -1,5 +1,8 @@
-import { Routes, Route } from 'react-router-dom'
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
+import { Routes, Route } from 'react-router-dom'
 import Dashboard from './Pages/Dashboard'
 import Customers from './Pages/Customers'
 import Products from './Pages/Products'
@@ -9,7 +12,7 @@ import Navbar from './components/common/Navbar'
 function App() {
 
   return (
-    <div className='w-screen min-h-screen flex flex-col'>
+    <div className='w-screen min-h-screen flex flex-col '>
       <Navbar/>
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />

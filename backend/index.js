@@ -7,6 +7,7 @@ const customerRoutes=require('./routes/customerRoute');
 const productRoutes=require('./routes/productRoute');
 const orderRoutes=require('./routes/orderRoute');
 const authRoutes=require('./routes/authRoute');
+const path=require('path')
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,8 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 connect();
 

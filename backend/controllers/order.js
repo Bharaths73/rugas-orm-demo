@@ -1,39 +1,49 @@
 const Product=require('../models/productSchema')
 const Order=require('../models/orderSchema')
 const Customer=require('../models/customerSchema')
+const mongoose=require('mongoose')
 
 exports.createOrder=async(req,res)=>{
-    const { customerId, productId, quantity, status } = req.body;
+    const { customer, product, quantity, status } = req.body;
 
   try {
-    const customer=await Customer.findById(customerId);
-    if(!customer){
+    const customerExists=await Customer.findById(new mongoose.Types.ObjectId(customer));
+    if(!customerExists){
         return res.status(404).json({
             success:false,
             message:"Customer not found"
         })
     }
 
-    const product = await Product.findById(productId);
+    const productExists = await Product.findById(new mongoose.Types.ObjectId(product));
 
-    if (!product) {
+    if (!productExists) {
       return res.status(404).json({ 
         success: false,
         message: 'Product not found' 
     });
     }
 
-    if (product.stock < quantity) {
+    const validStatuses = Order.schema.path('status').enumValues;
+
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ 
+        success:false,
+        message: 'Invalid status' 
+      });
+    }
+
+    if (productExists.stock < quantity) {
       return res.status(400).json({ 
         success: false,
         message: 'Insufficient product quantity' });
     }
 
-    const newOrder = new Order({ customerId, productId, quantity, status });
+    const newOrder = new Order({ customerId:customer, productId:product, quantity, status });
     await newOrder.save();
 
-    product.quantity -= quantity;
-    await product.save();
+    productExists.quantity -= quantity;
+    await productExists.save();
 
     return res.status(200).json({
         success: true,
@@ -51,7 +61,7 @@ exports.createOrder=async(req,res)=>{
 exports.getAllOrders=async(req,res)=>{
     const {sortOrder='status'}=req.query
   try {
-    const orders = await Order.find().populate('customerId').populate('productId').sort({[sortOrder]:1});
+    const orders = await Order.find().populate('customerId').populate('productId').sort({[sortOrder]:1}).select("customerId productId quantity status")
 
     return res.status(200).json({
         success: true,
