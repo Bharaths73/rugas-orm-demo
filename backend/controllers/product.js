@@ -79,9 +79,11 @@ exports.deleteProduct=async(req,res)=>{
         }
 
         const filePath = path.join(__dirname, '..', '..',deletedProduct.image);
-        fs.unlinkSync(filePath)
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+          }
 
-        const products=await Product.find({}).sort({category:1}).select("name description stock price category image")
+        const products=await Product.find().sort({category:1}).select("name description stock price category image")
 
         return res.status(200).json({
             success:true,
@@ -89,6 +91,62 @@ exports.deleteProduct=async(req,res)=>{
             products
         })
     } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        })
+    }
+}
+
+exports.updateProduct=async (req,res)=>{
+    try {      
+        const {_id:id,name,price,description,category,stock}=JSON.parse(req.body.productInfo);
+
+        if(!name ||!price ||!description ||!category ||!stock){
+            return res.status(400).json({
+                success:false,
+                message:"Please fill all the fields"
+            })
+        }
+        
+        const product=await Product.findById(id);
+        console.log("file is ",req.file);
+        
+
+        let fileName;
+        if(req.file){
+            const date=Date.now()
+            fileName=`uploads/products/${date}${req.file.originalname}`;
+            fs.renameSync(req.file.path,fileName);
+        };
+
+        const updateData = {
+            name: name,
+            price: price,
+            description: description,
+            category: category,
+            stock: stock,
+          };
+          
+          if (req.file) {
+            updateData.image = fileName;
+          }
+
+        const updatedProduct=await Product.findByIdAndUpdate(id,updateData)
+
+        if(!updatedProduct){
+            return res.status(404).json({
+                success: false,
+                message: "Product not found"
+            });
+        }
+        return res.status(200).json({
+            success:true,
+            message:"Product updated successfully",
+            product:updatedProduct
+        })
+    }
+    catch(error){
         return res.status(500).json({
             success:false,
             message:error.message,

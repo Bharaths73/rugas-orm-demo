@@ -14,10 +14,11 @@ function SelectComponent({control,type,data,name,value}) {
       name={name}
       control={control}
       render={({ field }) => (
-        <Select value={name === "status" ? field.value : field.value?._id || ""} onValueChange={(value) => {
-          if (name === "status") {
+        <Select value={name === "status" || name==="category" ? field.value : field.value?._id || ""} onValueChange={(value) => {
+          if (name === "status" || name==="category") {
             field.onChange(value);
-          } else {
+          }
+           else {
             const selectedItem = data.find((item) => item._id === value);
             field.onChange(selectedItem);
           }
@@ -27,7 +28,7 @@ function SelectComponent({control,type,data,name,value}) {
           </SelectTrigger>
           <SelectContent>
             {data.map((item) => (
-              <SelectItem key={item._id || item.id} value={item._id || item.status}>
+              <SelectItem key={item._id || item.id} value={item._id || item.name || item.status}>
                  {item.name || item.status}
               </SelectItem>
             ))}

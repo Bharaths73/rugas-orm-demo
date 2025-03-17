@@ -77,13 +77,43 @@ export const deleteProductData=async(dispatch,id,token)=>{
 
         console.log(response.data.products);
     
-        dispatch(setCustomers(response.data.products))
+        const updatedProducts = response.data.products.map((product) => ({
+            ...product,
+            image: product?.image && `${FILE_URL + product.image}`
+        }));
+        dispatch(setProducts(updatedProducts))
         toast.success("Deleted product successfully")
     }
     catch(error){
         console.log("deletion error",error);
         
         const errorMessage = error?.response?.data?.message || "Failed to delete product";
+
+        toast.error(errorMessage);
+    }
+    finally{
+        toast.dismiss(toastId)
+    }
+}
+
+export const updateProduct=async(dispatch,productData,token)=>{
+    const toastId=toast.loading('Updating Product')
+    try{
+        const response=await apiConnector('PUT', Products.UPDATE_PRODUCT_API,productData,{Authorization:`Bearer ${token}`,withCredentials:true})
+
+        if(!response.data.success){
+            throw new Error(response.data.message)
+        }
+
+        // console.log(response.data.customers);
+    
+        // dispatch(setCustomers(response.data.customers))
+        toast.success("Updated product successfully")
+    }
+    catch(error){
+        console.log(error);
+        
+        const errorMessage = error?.response?.data?.message || "Failed to update product";
 
         toast.error(errorMessage);
     }

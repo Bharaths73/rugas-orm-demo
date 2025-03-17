@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { categories } from '@/Utils/products'
-import { addProduct, deleteProductData, getAllProducts } from '@/Services/operations/ProductsApi'
+import { addProduct, deleteProductData, getAllProducts, updateProduct } from '@/Services/operations/ProductsApi'
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/button'
 import DataTable from '@/components/common/DataTable'
 import SelectComponent from '@/components/common/SelectComponent'
 import CardComponent from '@/components/common/CardComponent'
+import toast from 'react-hot-toast'
 
 
 function Products() {
@@ -30,24 +31,54 @@ function Products() {
   const [loading,setLoading] = useState(false)
   const {products}=useSelector((state)=>state.products)
   const [openForm, setOpenForm]=useState(false)
-   const token=useSelector((state)=>state.auth.token)
-  const {register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm()
+  const [editForm,setEditForm]=useState(null)
+  const token=useSelector((state)=>state.auth.token)
+  const {control,register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm({
+    defaultValues: {
+      name: "",
+      description: "",
+      stock: "",
+      price: "",
+      category: "",
+      image: null, 
+    },
+  })
   
   const getProducts= async()=>{
       setLoading(true)
       await getAllProducts(dispatch,token);
       setLoading(false)
   }
-  console.log("products are",products);
   
   const submitHandler=async(data)=>{
-    console.log("form data",data);
-    
     const formData=new FormData()
+    if(editForm){
+      const newData=getValues();
+      if(editForm.name===newData.name && editForm.description===newData.description && editForm.stock===newData.stock && editForm.price===newData.price && editForm.category===newData.category && !(newData.image instanceof File)){
+        toast("No changes made")
+          setEditForm(null)
+          setOpenForm(false)
+          return
+      }
+      newData._id = editForm.id;
+      console.log("new image ",newData.image);
+      
+      if (newData.image instanceof File) {
+        formData.append("image", newData.image); 
+      }
+      formData.append("productInfo",JSON.stringify(newData))
+      for (let pair of formData.entries()) {
+        console.log(`${pair[0]}:`, pair[1]);
+      }
+      await updateProduct(dispatch,formData,token)
+    }
+    
+    else{
     formData.append("image",data.image)
     formData.append("productInfo",JSON.stringify(data))
-    console.log(data.image);
     await addProduct(dispatch,formData,token)
+    }
+    setEditForm(null)
     setOpenForm(false)
   }
 
@@ -59,6 +90,16 @@ function Products() {
     await deleteProductData(dispatch,id,token)
   }
 
+  const editProduct=(data)=>{
+    setValue("name",data.name);
+    setValue("description",data.description);
+    setValue("stock",data.stock);
+    setValue("price",data.price)
+    setValue("category",data.category)
+    console.log(getValues());
+    setOpenForm(true);
+}
+
   useEffect(()=>{
      getProducts()
      if(isSubmitSuccessful){
@@ -66,7 +107,7 @@ function Products() {
         name:"",
         category:"",
         description:"",
-        image:"",
+        image:null,
         price:0,
         stock:0
       })
@@ -77,7 +118,19 @@ function Products() {
     <div className="w-full min-h-screen mt-20">
       <div className="w-11/12 mx-auto mt-5">
         <div className="w-full h-16">
-          <Dialog open={openForm} onOpenChange={setOpenForm}>
+          <Dialog open={openForm} onOpenChange={(isOpen) => {
+              setOpenForm(isOpen);
+              if (!isOpen) {
+                setEditForm(null);
+                reset({
+                  name: "",
+                  description: "",
+                  stock: "",
+                  price: "",
+                  category:""
+                });
+              }
+            }}>
             <DialogTrigger className="bg-black text-white py-2 px-5 border-black rounded-md cursor-pointer">
               New Product
             </DialogTrigger>
@@ -103,7 +156,13 @@ function Products() {
                     {...register("description", { required: true })}
                     required
                   />
-                  <SelectComponent register={register} data={categories} type='category' setValue={setValue}/>
+
+                  <SelectComponent
+                    control={control}
+                    name="category"
+                    data={categories}
+                    type="category"
+                  />
 
                   <Input id="picture" type="file" onChange={imageHandler}/>
                   <Input
@@ -145,12 +204,18 @@ function Products() {
               {products.map((product) => (
                 <CardComponent
                   key={product._id}
+                  id={product._id}
                   image={product.image}
                   name={product.name}
                   description={product.description}
                   price={product.price}
                   stock={product.stock}
+                  category={product.category}
                   deleteProduct={()=>deleteProduct(product._id)}
+                  editData={editProduct}
+                  setOpenForm={setOpenForm}
+                  openForm={openForm}
+                  setEditForm={setEditForm}
                 />
               ))}
               </div>
