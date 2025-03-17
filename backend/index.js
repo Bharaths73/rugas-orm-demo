@@ -7,7 +7,8 @@ const customerRoutes=require('./routes/customerRoute');
 const productRoutes=require('./routes/productRoute');
 const orderRoutes=require('./routes/orderRoute');
 const authRoutes=require('./routes/authRoute');
-const path=require('path')
+const path=require('path');
+const dashboardDetails=require('./routes/dashboardRoute')
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/v1/customers', customerRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/dashboard', dashboardDetails);
 
 const PORT=process.env.PORT || 5000;
 app.listen(PORT,(req,res)=>{

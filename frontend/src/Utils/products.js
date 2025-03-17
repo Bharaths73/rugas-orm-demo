@@ -24,18 +24,22 @@ export const categories=[
 export const orderStatus=[
     {
         id:1,
-        status:"placed",
+        status:"all",
     },
     {
         id:2,
-        status:"shipped",
+        status:"placed",
     },
     {
         id:3,
-        status:"delivered",
+        status:"shipped",
     },
     {
         id:4,
+        status:"delivered",
+    },
+    {
+        id:5,
         status:"cancelled",
     },
 ]

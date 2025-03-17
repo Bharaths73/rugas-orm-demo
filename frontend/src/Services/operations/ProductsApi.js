@@ -3,9 +3,9 @@ import { Products } from "../Api";
 import { setProducts } from "@/Slices/productsSlice";
 import { apiConnector } from "../ApiConnector";
 const FILE_URL = import.meta.env.VITE_APP_FILE_URL;
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGg3c21zQGdtYWlsLmNvbSIsImlkIjoiNjdkMjdkNDJkODQxYmExZTUwMmEzOGVhIiwiaWF0IjoxNzQyMDI1MjYxLCJleHAiOjE3NDIxMTE2NjF9.HdTJJrA6ku9-jScUFqZUSFA-N0obTy7ZV--GHaId4Zc"
 
-export const getAllProducts=async(dispatch)=>{
+export const getAllProducts=async(dispatch,token)=>{
+    console.log("token",token)
     const toastId=toast.loading('Getting all products')
     
     try{
@@ -37,7 +37,7 @@ export const getAllProducts=async(dispatch)=>{
     }
 }
 
-export const addProduct=async(dispatch,productData)=>{
+export const addProduct=async(dispatch,productData,token)=>{
     const toastId=toast.loading('Adding product')
     console.log("Adding Product");
     try{
@@ -64,7 +64,7 @@ export const addProduct=async(dispatch,productData)=>{
     }
 }
 
-export const deleteProductData=async(dispatch,id)=>{
+export const deleteProductData=async(dispatch,id,token)=>{
     const toastId=toast.loading('Deleting Product')
     console.log("id is ",id);
     

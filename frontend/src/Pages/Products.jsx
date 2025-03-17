@@ -30,11 +30,12 @@ function Products() {
   const [loading,setLoading] = useState(false)
   const {products}=useSelector((state)=>state.products)
   const [openForm, setOpenForm]=useState(false)
+   const token=useSelector((state)=>state.auth.token)
   const {register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm()
   
   const getProducts= async()=>{
       setLoading(true)
-      await getAllProducts(dispatch);
+      await getAllProducts(dispatch,token);
       setLoading(false)
   }
   console.log("products are",products);
@@ -46,7 +47,7 @@ function Products() {
     formData.append("image",data.image)
     formData.append("productInfo",JSON.stringify(data))
     console.log(data.image);
-    await addProduct(dispatch,formData)
+    await addProduct(dispatch,formData,token)
     setOpenForm(false)
   }
 
@@ -55,7 +56,7 @@ function Products() {
   }
 
   const deleteProduct=async(id)=>{
-    await deleteProductData(dispatch,id)
+    await deleteProductData(dispatch,id,token)
   }
 
   useEffect(()=>{

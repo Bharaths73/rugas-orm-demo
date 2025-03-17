@@ -5,7 +5,7 @@ require('dotenv').config();
 
 exports.signUp=async(req,res)=>{
     try {
-       const {username,email,password}=req.body;
+       const {name:username,email,password}=req.body;
 
        if(!username || !email || !password){
            return res.status(400).json({
@@ -93,6 +93,28 @@ exports.login=async(req,res)=>{
         })
 
     } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:error.message
+        })
+    }
+}
+
+exports.logout=async(req,res)=>{
+    try {
+        req.user.token=undefined;
+        // await req.user.save();
+
+        res.clearCookie('token', {
+            httpOnly: true,
+          });
+
+        res.status(200).json({
+            success:true,
+            message:"User logged out successfully"
+        })
+    }
+    catch (error) {
         return res.status(500).json({
             success:false,
             message:error.message

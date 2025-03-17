@@ -3,9 +3,8 @@ import { Orders } from "../Api";
 import { apiConnector } from "../ApiConnector";
 import { setProducts } from "@/Slices/productsSlice";
 import { setOrders } from "@/Slices/ordersSlice";
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGg3c21zQGdtYWlsLmNvbSIsImlkIjoiNjdkMjdkNDJkODQxYmExZTUwMmEzOGVhIiwiaWF0IjoxNzQyMDI1MjYxLCJleHAiOjE3NDIxMTE2NjF9.HdTJJrA6ku9-jScUFqZUSFA-N0obTy7ZV--GHaId4Zc"
 
-export const getAllOrders=async(dispatch)=>{
+export const getAllOrders=async(dispatch,token)=>{
     const toastId=toast.loading('Getting all orders')
     
     try{
@@ -31,7 +30,7 @@ export const getAllOrders=async(dispatch)=>{
     }
 }
 
-export const addOrder=async(dispatch,orderData)=>{
+export const addOrder=async(dispatch,orderData,token)=>{
     const toastId=toast.loading('Creating order')
     console.log("order is ",orderData);
     
@@ -51,6 +50,62 @@ export const addOrder=async(dispatch,orderData)=>{
         console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed create order";
+
+        toast.error(errorMessage);
+    }
+    finally{
+        toast.dismiss(toastId)
+    }
+}
+
+export const updateOrder=async(dispatch,orderData,token)=>{
+    const toastId=toast.loading('Updating order')
+    console.log("updated order is ",orderData);
+    
+    try{
+        const response=await apiConnector('PUT', Orders.UPDATE_ORDER_API,orderData,{Authorization:`Bearer ${token}`,withCredentials:true})
+
+        if(!response.data.success){
+            throw new Error(response.data.message)
+        }
+
+        // console.log(response.data.customers);
+    
+        // dispatch(setCustomers(response.data.customers))
+        toast.success("Updated order successfully")
+    }
+    catch(error){
+        console.log(error);
+        
+        const errorMessage = error?.response?.data?.message || "Failed to update order";
+
+        toast.error(errorMessage);
+    }
+    finally{
+        toast.dismiss(toastId)
+    }
+}
+
+export const deleteOrderData=async(dispatch,id,token)=>{
+    const toastId=toast.loading('Deleting Order')
+    console.log("id is ",id);
+    
+    try{
+        const response=await apiConnector('DELETE', `${Orders.DELETE_ORDER_API}/${id}`,null,{Authorization:`Bearer ${token}`,withCredentials:true})
+
+        if(!response.data.success){
+            throw new Error(response.data.message)
+        }
+
+        console.log(response.data.orders);
+    
+        dispatch(setOrders(response.data.orders))
+        toast.success("Deleted order successfully")
+    }
+    catch(error){
+        console.log("deletion error",error);
+        
+        const errorMessage = error?.response?.data?.message || "Failed to delete order";
 
         toast.error(errorMessage);
     }

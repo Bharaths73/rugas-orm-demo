@@ -14,8 +14,8 @@ import { MdDeleteForever } from "react-icons/md";
 
 function CardComponent({image,name,description,price,stock,deleteProduct}) {
   return (
-    <Card className='flex flex-col px-1 gap-y-3 bg-gray-100 shadow-black shadow-xl rounded-2xl border-gray-100 border-4 drop-shadow-xl hover:bg-white hover:border-white cursor-pointer'>
-        <img src={image} alt={name} className='w-full h-28 md:h-32 lg:h-40 mx-auto object-contain mb-2'/>
+    <Card className='flex flex-col px-1 gap-y-3 bg-gray-100 shadow-black shadow-xl rounded-2xl border-gray-100 border-4 drop-shadow-xl hover:bg-white hover:border-white cursor-pointer aspect-[16/9]'>
+        <img src={image} alt={name} className='w-full h-full md:h-32 lg:h-40 mx-auto object-contain mb-2'/>
       <CardHeader>
         <CardTitle>{name.toUpperCase()}</CardTitle>
         <CardDescription className='line-clamp-1'>{description}</CardDescription>

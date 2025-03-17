@@ -6,24 +6,35 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import { Controller } from 'react-hook-form';
 
-function SelectComponent({register,type,data,setValue}) {
+function SelectComponent({control,type,data,name,value}) {
   return (
-    <Select
-      {...register(type)}
-      onValueChange={(value) => setValue(type, value)}
-    >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={`Select ${type}`} />
-      </SelectTrigger>
-      <SelectContent>
-        {data.map((element, index) => (
-          <SelectItem key={element.id || element._id} value={type==='status'? element.status:(type==='category' ? element.name : element._id)}>
-            {type==='status'? element.status:element.name}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <Controller
+      name={name}
+      control={control}
+      render={({ field }) => (
+        <Select value={name === "status" ? field.value : field.value?._id || ""} onValueChange={(value) => {
+          if (name === "status") {
+            field.onChange(value);
+          } else {
+            const selectedItem = data.find((item) => item._id === value);
+            field.onChange(selectedItem);
+          }
+        }}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={`Select ${type}`} />
+          </SelectTrigger>
+          <SelectContent>
+            {data.map((item) => (
+              <SelectItem key={item._id || item.id} value={item._id || item.status}>
+                 {item.name || item.status}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      )}
+    />
   );
 }
 

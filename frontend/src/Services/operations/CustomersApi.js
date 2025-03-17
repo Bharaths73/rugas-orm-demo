@@ -3,11 +3,9 @@ import { Customers } from "../Api"
 import { apiConnector } from "../ApiConnector"
 import { setCustomers } from "@/Slices/customersSlice"
 
-const token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImJoYXJhdGg3c21zQGdtYWlsLmNvbSIsImlkIjoiNjdkMjdkNDJkODQxYmExZTUwMmEzOGVhIiwiaWF0IjoxNzQyMDI1MjYxLCJleHAiOjE3NDIxMTE2NjF9.HdTJJrA6ku9-jScUFqZUSFA-N0obTy7ZV--GHaId4Zc"
-
-export const getAllCustomers=async(dispatch)=>{
+export const getAllCustomers=async(dispatch,token)=>{
     const toastId=toast.loading('Getting all customers')
-    console.log("getAllCustomers");
+    console.log("token",token);
     try{
         const response=await apiConnector('GET', Customers.GET_ALL_CUSTOMERS_API,null,{Authorization:`Bearer ${token}`,withCredentials:true})
 
@@ -30,7 +28,7 @@ export const getAllCustomers=async(dispatch)=>{
     }
 }
 
-export const addCustomer=async(dispatch,customerData)=>{
+export const addCustomer=async(dispatch,customerData,token)=>{
     const toastId=toast.loading('Adding customer')
     console.log("Adding Customers");
     try{
@@ -55,7 +53,7 @@ export const addCustomer=async(dispatch,customerData)=>{
     }
 }
 
-export const updateCustomer=async(dispatch,updatedData)=>{
+export const updateCustomer=async(dispatch,updatedData,token)=>{
     const toastId=toast.loading('Updating customer')
     try{
         const response=await apiConnector('PUT', Customers.UPDATE_CUSTOMER_API,updatedData,{Authorization:`Bearer ${token}`,withCredentials:true})
@@ -79,7 +77,7 @@ export const updateCustomer=async(dispatch,updatedData)=>{
     }
 }
 
-export const deleteCustomerData=async(dispatch,id)=>{
+export const deleteCustomerData=async(dispatch,id,token)=>{
     const toastId=toast.loading('Deleting Customer')
     console.log("id is ",id);
     

@@ -8,21 +8,26 @@ import Customers from './Pages/Customers'
 import Products from './Pages/Products'
 import Orders from './Pages/Orders'
 import Navbar from './components/common/Navbar'
+import Auth from './Pages/Auth'
+import PublicRoute from './components/Auth/PublicRoute'
+import PrivateRoute from './components/Auth/PrivateRoute'
 
 function App() {
 
   return (
-    <div className='w-screen min-h-screen flex flex-col '>
-      <Navbar/>
+    <div className="w-screen min-h-screen flex flex-col mb-5">
+      <Navbar />
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/customers" element={<Customers />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/orders" element={<Orders />} />
-        {/* <Route path="/products/:id" element={<ProductDetails />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Register />} />
-        <Route path="*" element={<NotFound />} /> */}
+            <Route path="/login" element={<PublicRoute><Auth /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><Auth /></PublicRoute>} />
+            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/customers" element={<PrivateRoute><Customers /></PrivateRoute>} />
+            <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
+            <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
+        
+        {/* {
+        <Route path="*" element={<NotFound />} /> 
+        } */}
       </Routes>
     </div>
   );

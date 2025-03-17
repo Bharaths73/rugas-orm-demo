@@ -20,3 +20,13 @@ export const Orders={
     DELETE_ORDER_API:BASE_URL+'/orders/order',
     UPDATE_ORDER_API:BASE_URL+'/orders/order'
 }
+
+export const Auth={
+    LOGIN_API:BASE_URL+'/auth/login',
+    SIGNUP_API:BASE_URL+'/auth/signup',
+    LOGOUT_API:BASE_URL+'/auth/logout',
+}
+
+export const Dashboard={
+    Dashboard_Details_API:BASE_URL+'/dashboard/details',
+}

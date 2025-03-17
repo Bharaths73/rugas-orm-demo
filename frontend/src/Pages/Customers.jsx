@@ -22,13 +22,14 @@ function Customers() {
   const dispatch=useDispatch()
   const [loading,setLoading] = useState(false)
   const {customers}=useSelector((state)=>state.customers)
+  const token=useSelector((state)=>state.auth.token)
   const [openForm, setOpenForm]=useState(false)
   const [editForm,setEditForm]=useState(null)
   const {register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm()
   
   const getCustomers= async()=>{
       setLoading(true)
-      await getAllCustomers(dispatch);
+      await getAllCustomers(dispatch,token);
       setLoading(false)
   }
   const submitHandler=async(data)=>{
@@ -42,18 +43,18 @@ function Customers() {
           return
         }
         newData._id=editForm._id
-        await updateCustomer(dispatch,newData)
+        await updateCustomer(dispatch,newData,token)
         setEditForm(null)
         setOpenForm(false)
       }
       else{
-        await addCustomer(dispatch,data)
+        await addCustomer(dispatch,data,token)
         setOpenForm(false)
       }
   }
 
   const deleteCustomer=async(id)=>{
-     await deleteCustomerData(dispatch,id)
+     await deleteCustomerData(dispatch,id,token)
   }
 
   const editCustomer=(data)=>{
