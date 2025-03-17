@@ -31,6 +31,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.3.0",
     "react-super-responsive-table": "^6.0.1",
+    "recharts": "^2.15.1",
     "shadcn-ui": "^0.9.5",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.13",
