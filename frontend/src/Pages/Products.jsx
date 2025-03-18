@@ -52,14 +52,16 @@ function Products() {
   }
   
   const submitHandler=async(data)=>{
+    let result;
     const formData=new FormData()
     if(editForm){
       const newData=getValues();
       if(editForm.name===newData.name && editForm.description===newData.description && editForm.stock===newData.stock && editForm.price===newData.price && editForm.category===newData.category && !(newData.image instanceof File)){
         toast("No changes made")
-          setEditForm(null)
-          setOpenForm(false)
-          return
+        reset()
+        setEditForm(null)
+        setOpenForm(false)
+        return
       }
       newData._id = editForm.id;
       
@@ -67,26 +69,22 @@ function Products() {
         formData.append("image", newData.image); 
       }
       formData.append("productInfo",JSON.stringify(newData))
-      let result=await updateProduct(dispatch,formData,token)
-      if(!result){
-        setError(true)
-      }
-      else{
-        setError(false)
-      }
+      result=await updateProduct(dispatch,formData,token)
     }
     
     else{
     formData.append("image",data.image)
     formData.append("productInfo",JSON.stringify(data))
-    let result=await addProduct(dispatch,formData,token)
+    result=await addProduct(dispatch,formData,token)
+    }
     if(!result){
       setError(true)
     }
     else{
       setError(false)
+      getProducts()
     }
-    }
+    reset()
     setEditForm(null)
     setOpenForm(false)
   }
@@ -112,17 +110,7 @@ function Products() {
     if(!error){
       getProducts()
     }
-     if(isSubmitSuccessful){
-      reset({
-        name:"",
-        category:"",
-        description:"",
-        image:null,
-        price:0,
-        stock:0
-      })
-   }
-  },[dispatch,isSubmitSuccessful])
+  },[dispatch])
 
   return (
     <div className="w-full min-h-screen mt-20">

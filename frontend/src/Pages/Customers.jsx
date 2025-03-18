@@ -34,36 +34,33 @@ function Customers() {
       setLoading(false)
   }
   const submitHandler=async(data)=>{
+    let result;
       if(editForm){
         const newData=getValues();
         if(editForm.name===newData.name && editForm.email===newData.email && editForm.phone===newData.phone && editForm.address===newData.address)
         {
           toast("No changes made")
+          reset()
           setEditForm(null)
           setOpenForm(false)
           return
         }
         newData._id=editForm._id
-        let result=await updateCustomer(dispatch,newData,token)
-        if(!result){
-          setError(true)
-        }
-        else{
-          setError(false)
-        }
-        setEditForm(null)
-        setOpenForm(false)
+        result=await updateCustomer(dispatch,newData,token)
       }
       else{
-        let result=await addCustomer(dispatch,data,token)
-        if(!result){
-          setError(true)
-        }
-        else{
-          setError(false)
-        }
-        setOpenForm(false)
+        result=await addCustomer(dispatch,data,token)
       }
+      if(!result){
+        setError(true)
+      }
+      else{
+        setError(false)
+        getCustomers();
+      }
+      reset()
+      setEditForm(null)
+      setOpenForm(false)
   }
 
   const deleteCustomer=async(id)=>{
@@ -79,18 +76,10 @@ function Customers() {
   }
 
   useEffect(()=>{
-     if(!error){
+    if(!error){
       getCustomers()
      }
-     if(isSubmitSuccessful){
-      reset({
-        name:"",
-        email:"",
-        phone:"",
-        address:""
-      })
-   }
-  },[dispatch,isSubmitSuccessful])
+  },[dispatch])
 
   return (
     <div className="w-full min-h-screen mt-20">

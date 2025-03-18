@@ -47,35 +47,32 @@ function Orders() {
   }
   
   const submitHandler=async(data)=>{
+    let result;
         if(editForm){
            const newData=getValues();
           if(editForm.customerId._id===newData.customer._id && editForm.productId._id===newData.product._id && editForm.quantity===newData.quantity && editForm.status===newData.status){
             toast("No changes made")
+            reset()
             setEditForm(null)
             setOpenForm(false)
             return
           }
           newData._id = editForm._id;
-          let result=await updateOrder(dispatch, newData,token);
-          if(!result){
-            setError(true)
-          }
-          else{
-            setError(false)
-          }
-          setEditForm(null);
-          setOpenForm(false);
+          result=await updateOrder(dispatch, newData,token);
         }
         else{
-          let result=await addOrder(dispatch,data,token)
-          if(!result){
-            setError(true)
-          }
-          else{
-            setError(false)
-          }
-          setOpenForm(false)
+          result=await addOrder(dispatch,data,token)
         }
+        if(!result){
+          setError(true)
+        }
+        else{
+          setError(false)
+          getOrders()
+        }
+        reset()
+        setEditForm(null);
+        setOpenForm(false);
         
   }
 
@@ -107,15 +104,7 @@ function Orders() {
      if(!error){
       getOrders()
      }
-     if(isSubmitSuccessful){
-      reset({
-        customer:"",
-        product:"",
-        quantity:"",
-        status:"",
-      })
-   }
-  },[isSubmitSuccessful])
+  },[])
 
   return (
     <div className="w-full min-h-screen mt-20">
