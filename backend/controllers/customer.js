@@ -104,6 +104,15 @@ exports.updateCustomer = async(req,res)=>{
             })
         }
 
+        const customerEmail=await Customer.findOne({email:email,_id: { $ne: _id } })
+
+        if(customerEmail){
+            return res.status(400).json({
+                success:false,
+                message:"Customer email already exists"
+            })
+        }
+
         const customer=await Customer.findByIdAndUpdate(_id, {name,email,address,phone}, {new: true});
         if(!customer){
             return res.status(404).json({

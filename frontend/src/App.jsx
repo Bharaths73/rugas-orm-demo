@@ -11,6 +11,7 @@ import Navbar from './components/common/Navbar'
 import Auth from './Pages/Auth'
 import PublicRoute from './components/Auth/PublicRoute'
 import PrivateRoute from './components/Auth/PrivateRoute'
+import Error from './Pages/Error'
 
 function App() {
 
@@ -24,10 +25,7 @@ function App() {
             <Route path="/customers" element={<PrivateRoute><Customers /></PrivateRoute>} />
             <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
             <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
-        
-        {/* {
-        <Route path="*" element={<NotFound />} /> 
-        } */}
+        <Route path="*" element={<Error/>} /> 
       </Routes>
     </div>
   );

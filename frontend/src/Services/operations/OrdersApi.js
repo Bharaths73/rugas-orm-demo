@@ -14,7 +14,7 @@ export const getAllOrders=async(dispatch,token)=>{
             throw new Error(response.data.message)
         }
 
-        console.log(response.data.orders);
+        console.log("orders are",response.data.orders);
         dispatch(setOrders(response?.data?.orders))
         toast.success("Fetched orders successfully")
     }
@@ -35,16 +35,15 @@ export const addOrder=async(dispatch,orderData,token)=>{
     console.log("order is ",orderData);
     
     try{
+        let result;
         const response=await apiConnector('POST', Orders.ADD_ORDER_API,orderData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
-
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result = response?.data?.order
         toast.success("Created order successfully")
+        return result
     }
     catch(error){
         console.log(error);
@@ -63,16 +62,16 @@ export const updateOrder=async(dispatch,orderData,token)=>{
     console.log("updated order is ",orderData);
     
     try{
+        let result;
         const response=await apiConnector('PUT', Orders.UPDATE_ORDER_API,orderData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
 
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result = response?.data?.order
         toast.success("Updated order successfully")
+        return result
     }
     catch(error){
         console.log(error);

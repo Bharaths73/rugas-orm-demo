@@ -78,10 +78,11 @@ exports.deleteProduct=async(req,res)=>{
             });
         }
 
-        const filePath = path.join(__dirname, '..', '..',deletedProduct.image);
+        const filePath = path.join(__dirname, '..',deletedProduct.image);
+        
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
-          }
+        }
 
         const products=await Product.find().sort({category:1}).select("name description stock price category image")
 
@@ -115,6 +116,11 @@ exports.updateProduct=async (req,res)=>{
 
         let fileName;
         if(req.file){
+            const filePath = path.join(__dirname, '..', product.image);
+
+            if (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
             const date=Date.now()
             fileName=`uploads/products/${date}${req.file.originalname}`;
             fs.renameSync(req.file.path,fileName);

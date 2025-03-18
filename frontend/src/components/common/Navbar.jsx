@@ -59,8 +59,8 @@ function Navbar() {
           {
              token &&
              <NavigationMenu  className="md:hidden">
-            <NavigationMenuList>
-              <NavigationMenuItem>
+            <NavigationMenuList className=''>
+              <NavigationMenuItem className=''>
                 <NavigationMenuTrigger className='bg-gray-800 text-white'><GiHamburgerMenu className='text-3xl'/></NavigationMenuTrigger>
                 <NavigationMenuContent className="">
                   

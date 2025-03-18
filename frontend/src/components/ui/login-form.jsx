@@ -46,11 +46,11 @@ export function LoginForm({
             <div className="flex flex-col gap-6">
               {
                  mode==="signup" && <div className="grid gap-2">
-                 <Label htmlFor="name">Email</Label>
+                 <Label htmlFor="name">Full Name</Label>
                  <Input
                    id="name"
                    type="text"
-                   placeholder="Enter your full name"
+                   placeholder="Enter full name"
                    required {...register("name",{required:true})}
                  />
                </div>

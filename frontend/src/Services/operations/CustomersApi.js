@@ -32,16 +32,16 @@ export const addCustomer=async(dispatch,customerData,token)=>{
     const toastId=toast.loading('Adding customer')
     console.log("Adding Customers");
     try{
+        let result;
         const response=await apiConnector('POST', Customers.ADD_CUSTOMER_API,customerData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
 
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result=response?.data?.customer
         toast.success("Added customer successfully")
+        return result
     }
     catch(error){
         const errorMessage = error?.response?.data?.message || "Failed add customer";
@@ -56,16 +56,17 @@ export const addCustomer=async(dispatch,customerData,token)=>{
 export const updateCustomer=async(dispatch,updatedData,token)=>{
     const toastId=toast.loading('Updating customer')
     try{
+        let result;
         const response=await apiConnector('PUT', Customers.UPDATE_CUSTOMER_API,updatedData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
 
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result=response?.data?.customer
+        console.log(response?.data?.customer);
         toast.success("Updated customer successfully")
+        return result
     }
     catch(error){
         const errorMessage = error?.response?.data?.message || "Failed to update customer";

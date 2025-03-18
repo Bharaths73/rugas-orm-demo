@@ -25,6 +25,7 @@ function Customers() {
   const token=useSelector((state)=>state.auth.token)
   const [openForm, setOpenForm]=useState(false)
   const [editForm,setEditForm]=useState(null)
+  const [error,setError]=useState(false)
   const {register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm()
   
   const getCustomers= async()=>{
@@ -43,18 +44,30 @@ function Customers() {
           return
         }
         newData._id=editForm._id
-        await updateCustomer(dispatch,newData,token)
+        let result=await updateCustomer(dispatch,newData,token)
+        if(!result){
+          setError(true)
+        }
+        else{
+          setError(false)
+        }
         setEditForm(null)
         setOpenForm(false)
       }
       else{
-        await addCustomer(dispatch,data,token)
+        let result=await addCustomer(dispatch,data,token)
+        if(!result){
+          setError(true)
+        }
+        else{
+          setError(false)
+        }
         setOpenForm(false)
       }
   }
 
   const deleteCustomer=async(id)=>{
-     await deleteCustomerData(dispatch,id,token)
+       await deleteCustomerData(dispatch,id,token)
   }
 
   const editCustomer=(data)=>{
@@ -66,7 +79,9 @@ function Customers() {
   }
 
   useEffect(()=>{
-     getCustomers()
+     if(!error){
+      getCustomers()
+     }
      if(isSubmitSuccessful){
       reset({
         name:"",

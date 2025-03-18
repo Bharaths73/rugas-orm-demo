@@ -32,6 +32,7 @@ function Products() {
   const {products}=useSelector((state)=>state.products)
   const [openForm, setOpenForm]=useState(false)
   const [editForm,setEditForm]=useState(null)
+  const[error,setError]=useState(false)
   const token=useSelector((state)=>state.auth.token)
   const {control,register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm({
     defaultValues: {
@@ -70,13 +71,25 @@ function Products() {
       for (let pair of formData.entries()) {
         console.log(`${pair[0]}:`, pair[1]);
       }
-      await updateProduct(dispatch,formData,token)
+      let result=await updateProduct(dispatch,formData,token)
+      if(!result){
+        setError(true)
+      }
+      else{
+        setError(false)
+      }
     }
     
     else{
     formData.append("image",data.image)
     formData.append("productInfo",JSON.stringify(data))
-    await addProduct(dispatch,formData,token)
+    let result=await addProduct(dispatch,formData,token)
+    if(!result){
+      setError(true)
+    }
+    else{
+      setError(false)
+    }
     }
     setEditForm(null)
     setOpenForm(false)
@@ -101,7 +114,9 @@ function Products() {
 }
 
   useEffect(()=>{
-     getProducts()
+    if(!error){
+      getProducts()
+    }
      if(isSubmitSuccessful){
       reset({
         name:"",

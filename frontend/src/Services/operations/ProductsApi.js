@@ -41,16 +41,15 @@ export const addProduct=async(dispatch,productData,token)=>{
     const toastId=toast.loading('Adding product')
     console.log("Adding Product");
     try{
+        let result;
         const response=await apiConnector('POST', Products.ADD_PRODUCT_API,productData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
-
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result=response?.data?.product
         toast.success("Added product successfully")
+        return result
     }
     catch(error){
         console.log(error);
@@ -99,16 +98,16 @@ export const deleteProductData=async(dispatch,id,token)=>{
 export const updateProduct=async(dispatch,productData,token)=>{
     const toastId=toast.loading('Updating Product')
     try{
+        let result;
         const response=await apiConnector('PUT', Products.UPDATE_PRODUCT_API,productData,{Authorization:`Bearer ${token}`,withCredentials:true})
 
         if(!response.data.success){
             throw new Error(response.data.message)
         }
 
-        // console.log(response.data.customers);
-    
-        // dispatch(setCustomers(response.data.customers))
+        result=response?.data?.product
         toast.success("Updated product successfully")
+        return result
     }
     catch(error){
         console.log(error);

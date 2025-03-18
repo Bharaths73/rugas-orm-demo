@@ -36,6 +36,7 @@ function Orders() {
   const {customers}=useSelector((state)=>state.customers)
   const [openForm, setOpenForm]=useState(false)
   const [editForm,setEditForm]=useState(null)
+  const [error,setError]=useState(false)
   const[filterData,setFilterData]=useState("all")
   const {control, register,reset,handleSubmit,setValue,getValues,formState:{errors,isSubmitSuccessful,isSubmitting}}=useForm()
   
@@ -57,12 +58,24 @@ function Orders() {
             return
           }
           newData._id = editForm._id;
-          await updateOrder(dispatch, newData,token);
+          let result=await updateOrder(dispatch, newData,token);
+          if(!result){
+            setError(true)
+          }
+          else{
+            setError(false)
+          }
           setEditForm(null);
           setOpenForm(false);
         }
         else{
-          await addOrder(dispatch,data,token)
+          let result=await addOrder(dispatch,data,token)
+          if(!result){
+            setError(true)
+          }
+          else{
+            setError(false)
+          }
           setOpenForm(false)
         }
         
@@ -94,7 +107,9 @@ function Orders() {
   },[openForm])
 
   useEffect(()=>{
-     getOrders()
+     if(!error){
+      getOrders()
+     }
      if(isSubmitSuccessful){
       reset({
         customer:"",
