@@ -17,8 +17,8 @@ function App() {
   const {token}=useSelector(state=>state.auth)
   return (
     <div className="w-screen min-h-screen flex flex-col mb-5">
-      <Suspense fallback={<h2 className='text-2xl text-center my-auto'>Loading...</h2>}>
       <Navbar />
+      <Suspense fallback={<h2 className='text-2xl text-center my-auto'>Loading...</h2>}>
       <Routes>
         <Route
           path="/login"
