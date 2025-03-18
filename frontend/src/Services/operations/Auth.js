@@ -12,7 +12,7 @@ export const signup=async(dispatch,data,navigate)=>{
             throw new Error(response.data.message)
         }
 
-        console.log(response?.data?.user);
+        // console.log(response?.data?.user);
     
         dispatch(setUser(response?.data?.user))
         dispatch(setToken(response?.data?.token))
@@ -22,7 +22,7 @@ export const signup=async(dispatch,data,navigate)=>{
         toast.success("Created your account")
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         const errorMessage = error?.response?.data?.message || "Failed to create your account";
 
         toast.error(errorMessage);
@@ -41,7 +41,7 @@ export const login=async(dispatch,data,navigate)=>{
             throw new Error(response.data.message)
         }
 
-        console.log(response?.data?.user);
+        // console.log(response?.data?.user);
     
         dispatch(setUser(response?.data?.user))
         dispatch(setToken(response?.data?.token))
@@ -51,7 +51,7 @@ export const login=async(dispatch,data,navigate)=>{
         toast.success("Login successful!")
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed logging";
 
@@ -79,7 +79,7 @@ export const logout=async(dispatch,navigate,token)=>{
         toast.success("Logout successful!")
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed logout";
 

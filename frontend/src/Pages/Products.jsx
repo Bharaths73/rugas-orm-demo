@@ -62,15 +62,11 @@ function Products() {
           return
       }
       newData._id = editForm.id;
-      console.log("new image ",newData.image);
       
       if (newData.image instanceof File) {
         formData.append("image", newData.image); 
       }
       formData.append("productInfo",JSON.stringify(newData))
-      for (let pair of formData.entries()) {
-        console.log(`${pair[0]}:`, pair[1]);
-      }
       let result=await updateProduct(dispatch,formData,token)
       if(!result){
         setError(true)
@@ -109,7 +105,6 @@ function Products() {
     setValue("stock",data.stock);
     setValue("price",data.price)
     setValue("category",data.category)
-    console.log(getValues());
     setOpenForm(true);
 }
 

@@ -1,32 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
-import { Routes, Route } from 'react-router-dom'
-import Dashboard from './Pages/Dashboard'
-import Customers from './Pages/Customers'
-import Products from './Pages/Products'
-import Orders from './Pages/Orders'
-import Navbar from './components/common/Navbar'
-import Auth from './Pages/Auth'
+import React, { Suspense, lazy } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom'
+const Dashboard = lazy(() => import('./Pages/Dashboard'))
+const Products = lazy(() => import('./Pages/Products'));
+const Customers = lazy(() => import('./Pages/Customers'));
+const Orders = lazy(() => import('./Pages/Orders'));
+const Navbar= lazy(() => import('./components/common/Navbar'));
+const Auth = lazy(() => import('./Pages/Auth'));
+const Error = lazy(() => import('./Pages/Error'));
 import PublicRoute from './components/Auth/PublicRoute'
 import PrivateRoute from './components/Auth/PrivateRoute'
-import Error from './Pages/Error'
+import { useSelector } from 'react-redux'
 
 function App() {
 
+  const {token}=useSelector(state=>state.auth)
   return (
     <div className="w-screen min-h-screen flex flex-col mb-5">
+      <Suspense fallback={<h2 className='text-2xl text-center my-auto'>Loading...</h2>}>
       <Navbar />
       <Routes>
-            <Route path="/login" element={<PublicRoute><Auth /></PublicRoute>} />
-            <Route path="/signup" element={<PublicRoute><Auth /></PublicRoute>} />
-            <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-            <Route path="/customers" element={<PrivateRoute><Customers /></PrivateRoute>} />
-            <Route path="/products" element={<PrivateRoute><Products /></PrivateRoute>} />
-            <Route path="/orders" element={<PrivateRoute><Orders /></PrivateRoute>} />
-        <Route path="*" element={<Error/>} /> 
+        <Route
+          path="/login"
+          element={
+            <PublicRoute>
+              <Auth />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Auth />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/customers"
+          element={
+            <PrivateRoute>
+              <Customers />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <PrivateRoute>
+              <Products />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <PrivateRoute>
+              <Orders />
+            </PrivateRoute>
+          }
+        />
+        <Route path="/" element={
+          token ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+        } />
+        <Route path="*" element={<Error />} />
       </Routes>
+      </Suspense>
     </div>
   );
 }

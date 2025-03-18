@@ -61,7 +61,6 @@ exports.getAllProducts=async (req,res)=>{
 exports.deleteProduct=async(req,res)=>{
     try {
         const {id}=req.params;
-        console.log("id is ",id);
         
         if(!id){
             return res.status(400).json({
@@ -111,7 +110,6 @@ exports.updateProduct=async (req,res)=>{
         }
         
         const product=await Product.findById(id);
-        console.log("file is ",req.file);
         
 
         let fileName;

@@ -12,7 +12,6 @@ import { MdModeEdit } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
 
 function DataTable({head,body,tableName,editData,deleteData,setOpenForm,openForm,setEditForm}) {
-  console.log(head);
 
   const editFormHandler=(data)=>{
       setEditForm(data)

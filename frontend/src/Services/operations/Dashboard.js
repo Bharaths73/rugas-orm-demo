@@ -12,7 +12,7 @@ export const getDashboardDetailsBackend=async(token)=>{
             throw new Error(response.data.message)
         }
 
-        console.log(response.data.dashboardDetails);
+        // console.log(response.data.dashboardDetails);
 
         toast.success("Fetched details successfully")
         return response?.data?.dashboardDetails

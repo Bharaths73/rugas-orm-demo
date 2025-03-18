@@ -14,12 +14,12 @@ export const getAllOrders=async(dispatch,token)=>{
             throw new Error(response.data.message)
         }
 
-        console.log("orders are",response.data.orders);
+        // console.log("orders are",response.data.orders);
         dispatch(setOrders(response?.data?.orders))
         toast.success("Fetched orders successfully")
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed to get all orders";
 
@@ -32,7 +32,7 @@ export const getAllOrders=async(dispatch,token)=>{
 
 export const addOrder=async(dispatch,orderData,token)=>{
     const toastId=toast.loading('Creating order')
-    console.log("order is ",orderData);
+    // console.log("order is ",orderData);
     
     try{
         let result;
@@ -46,7 +46,7 @@ export const addOrder=async(dispatch,orderData,token)=>{
         return result
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed create order";
 
@@ -59,7 +59,7 @@ export const addOrder=async(dispatch,orderData,token)=>{
 
 export const updateOrder=async(dispatch,orderData,token)=>{
     const toastId=toast.loading('Updating order')
-    console.log("updated order is ",orderData);
+    // console.log("updated order is ",orderData);
     
     try{
         let result;
@@ -74,7 +74,7 @@ export const updateOrder=async(dispatch,orderData,token)=>{
         return result
     }
     catch(error){
-        console.log(error);
+        // console.log(error);
         
         const errorMessage = error?.response?.data?.message || "Failed to update order";
 
@@ -87,7 +87,7 @@ export const updateOrder=async(dispatch,orderData,token)=>{
 
 export const deleteOrderData=async(dispatch,id,token)=>{
     const toastId=toast.loading('Deleting Order')
-    console.log("id is ",id);
+    // console.log("id is ",id);
     
     try{
         const response=await apiConnector('DELETE', `${Orders.DELETE_ORDER_API}/${id}`,null,{Authorization:`Bearer ${token}`,withCredentials:true})
@@ -96,13 +96,13 @@ export const deleteOrderData=async(dispatch,id,token)=>{
             throw new Error(response.data.message)
         }
 
-        console.log(response.data.orders);
+        // console.log(response.data.orders);
     
         dispatch(setOrders(response.data.orders))
         toast.success("Deleted order successfully")
     }
     catch(error){
-        console.log("deletion error",error);
+        // console.log("deletion error",error);
         
         const errorMessage = error?.response?.data?.message || "Failed to delete order";
 

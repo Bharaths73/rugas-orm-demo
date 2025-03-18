@@ -77,7 +77,6 @@ exports.getAllOrders=async(req,res)=>{
 
 exports.updateOrder=async(req,res)=>{
   const { customer, product, quantity, status, _id:orderId } = req.body;
-  console.log(req.body);
   
   try {
     const customerExists=await Customer.findById(new mongoose.Types.ObjectId(customer._id));
@@ -143,7 +142,6 @@ exports.updateOrder=async(req,res)=>{
 exports.deleteOrder=async(req,res)=>{
     try {
             const {id}=req.params;
-            console.log("id is ",id);
             
             if(!id){
                 return res.status(400).json({

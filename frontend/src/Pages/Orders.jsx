@@ -49,8 +49,6 @@ function Orders() {
   const submitHandler=async(data)=>{
         if(editForm){
            const newData=getValues();
-           console.log("edit form data ",editForm);
-           console.log("new form data ",newData);
           if(editForm.customerId._id===newData.customer._id && editForm.productId._id===newData.product._id && editForm.quantity===newData.quantity && editForm.status===newData.status){
             toast("No changes made")
             setEditForm(null)
@@ -91,7 +89,6 @@ function Orders() {
     }
 
   const editOrder=(data)=>{
-    console.log("order data is ",data);
     
     setValue("customer",data.customerId);
     setValue("product",data.productId);

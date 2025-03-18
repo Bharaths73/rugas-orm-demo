@@ -58,7 +58,6 @@ exports.getAllCustomers=async(req,res)=>{
 exports.deleteCustomer=async(req,res)=>{
     try {
         const {id}=req.params;
-        console.log("id is ",id);
         
         if(!id){
             return res.status(400).json({
@@ -95,7 +94,6 @@ exports.deleteCustomer=async(req,res)=>{
 exports.updateCustomer = async(req,res)=>{
     try {
         const {_id,name,email,address,phone}=req.body;
-        console.log("update customer ",req.body);
         
         if(!name || !address || !phone || !email){
             return res.status(400).json({
